@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vesak Thorana</title>
+  <style>
+    body {
+      background-color: #000;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: sans-serif;
+    }
+
+    .thorana-frame {
+      position: relative;
+      width: 95%;
+      max-width: 1000px;
+      border: 8px solid gold;
+      padding: 20px;
+      background-color: #111;
+      box-shadow: 0 0 30px gold;
+    }
+
+    .light, .panel-light {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: red;
+      box-shadow: 0 0 5px red;
+      position: absolute;
+      transition: 0.3s;
+    }
+
+    .light.on, .panel-light.on {
+      background-color: lime;
+      box-shadow: 0 0 10px lime;
+    }
+
+    .panel {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .image-container {
+      position: relative;
+      width: 200px;
+      height: 140px;
+      background-color: #222;
+      box-shadow: 0 0 15px white;
+      border: 3px solid white;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-container .panel-light {
+      position: absolute;
+    }
+
+    h1 {
+      text-align: center;
+      color: #f0f0a0;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="thorana-frame" id="thorana">
+    <h1>Vesak Thorana</h1>
+
+    <!-- Outer Frame Lights -->
+    <div class="light" style="top: -8px; left: 10%;"></div>
+    <div class="light" style="top: -8px; left: 30%;"></div>
+    <div class="light" style="top: -8px; left: 50%;"></div>
+    <div class="light" style="top: -8px; left: 70%;"></div>
+    <div class="light" style="top: -8px; left: 90%;"></div>
+
+    <!-- Story Panels -->
+    <div class="panel">
+      <!-- Image 1 -->
+      <div class="image-container">
+        <img src="image1.jpg" alt="Scene 1" />
+        <!-- Top bulbs -->
+        ${generateBulbs('top')}
+        <!-- Bottom bulbs -->
+        ${generateBulbs('bottom')}
+        <!-- Left bulbs -->
+        ${generateBulbs('left')}
+        <!-- Right bulbs -->
+        ${generateBulbs('right')}
+      </div>
+
+      <!-- Image 2 -->
+      <div class="image-container">
+        <img src="image2.jpg" alt="Scene 2" />
+        ${generateBulbs('top')}
+        ${generateBulbs('bottom')}
+        ${generateBulbs('left')}
+        ${generateBulbs('right')}
+      </div>
+
+      <!-- Image 3 -->
+      <div class="image-container">
+        <img src="image3.jpg" alt="Scene 3" />
+        ${generateBulbs('top')}
+        ${generateBulbs('bottom')}
+        ${generateBulbs('left')}
+        ${generateBulbs('right')}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dynamically insert bulbs with small gaps
+    const directions = ['top', 'bottom', 'left', 'right'];
+
+    function createBulb(x, y, rotate = 0) {
+      const bulb = document.createElement('div');
+      bulb.classList.add('panel-light');
+      bulb.style.left = x + '%';
+      bulb.style.top = y + '%';
+      if (rotate) bulb.style.transform = rotate(${rotate}deg);
+      return bulb;
+    }
+
+    // Place dense bulbs on each image
+    document.querySelectorAll('.image-container').forEach(container => {
+      // Top and bottom bulbs
+      for (let i = 5; i < 100; i += 10) {
+        ['top', 'bottom'].forEach(dir => {
+          const bulb = createBulb(i, dir === 'top' ? 0 : 100);
+          container.appendChild(bulb);
+        });
+      }
+      // Left and right bulbs
+      for (let i = 10; i < 100; i += 10) {
+        ['left', 'right'].forEach(dir => {
+          const bulb = createBulb(dir === 'left' ? 0 : 100, i);
+          container.appendChild(bulb);
+        });
+      }
+    });
+
+    // Blinking effect
+    const lights = document.querySelectorAll('.light, .panel-light');
+    setInterval(() => {
+      lights.forEach((light, i) => {
+        if (i % 2 === 0) {
+          light.classList.toggle('on');
+        } else {
+          setTimeout(() => light.classList.toggle('on'), 100);
+        }
+      });
+    }, 500);
+  </script>
+
+</body>
+</html>
